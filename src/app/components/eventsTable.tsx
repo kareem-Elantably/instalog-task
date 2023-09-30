@@ -51,8 +51,8 @@ function EventsTable() {
         <div className=" px-4">
           <input
             type="text"
-            placeholder="Search name,email o action..."
-            className="mb-4 p-4 w-full border rounded-xl bg-gray-100"
+            placeholder="Search name,email or action..."
+            className="mb-4 p-2 w-full border rounded-xl bg-gray-100"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -88,9 +88,9 @@ function EventsTable() {
                     )
                   }
                 >
-                  <td className="py-2 px-4">{event.actor.name}</td>
-                  <td className="py-2 px-4 ">{event.action.name}</td>
-                  <td className="py-2 px-4">
+                  <td className="py-2 px-4 text-xs">{event.actor.name}</td>
+                  <td className="py-2 px-4 text-xs">{event.action.name}</td>
+                  <td className="py-2 px-4 text-xs">
                     {format(new Date(event.occurredAt), "MMM d, h:mm aa")}
                   </td>
                   <td className="py-2 px-4 "></td>

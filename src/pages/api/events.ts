@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     if (req.method === "POST") {
+
       const event = await prisma.event.create({
         data: req.body,
       });
