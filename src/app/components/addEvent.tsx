@@ -1,10 +1,15 @@
 import React from "react";
+import { v4 as uuidv4 } from "uuid";
+import { Button } from "@/components/ui/button";
+
 interface UserDataType {
-  id: number;
   name: string;
   email: string;
 }
-
+interface ActionDataType {
+  actionId: string;
+  name: string;
+}
 interface EventObjectType {
   eventId: string;
   actorId: number;
@@ -15,57 +20,113 @@ interface EventObjectType {
   metadata: string;
 }
 
-async function addEvent(eventObject: EventObjectType) {
+const userData = {
+  name: uuidv4(),
+  email: uuidv4(),
+};
+
+const actionData = {
+  actionId: uuidv4(),
+  name: uuidv4(),
+};
+
+const eventObject = {
+  eventId: uuidv4(),
+  actorId: 2,
+  group: "instatus.com",
+  actionId: 2,
+  targetId: 2,
+  location: "105.40.62.95",
+  occurredAt: new Date().toISOString(),
+  metadata: "{'key':'value'}",
+};
+
+async function postToAPI(model: string, data: any) {
   const response = await fetch("/api/events", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(eventObject),
+    body: JSON.stringify({ model, data }),
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to log event: ${await response.text()}`);
+    throw new Error(`Failed to post to /api/events: ${await response.text()}`);
   }
 
   return await response.json();
 }
 
-async function handleAction(userData: UserDataType, action: number) {
-  const eventObject = {
-    eventId: "6", // Change from event_id to eventId
-    actorId: userData.id, // Change from actor_id to actorId
-    group: "instatus.com",
-    actionId: 2, // Change from action_id to actionId
-    targetId: userData.id, // Change from target_id to targetId
-    location: "105.40.62.95",
-    occurredAt: new Date().toISOString(), // Change from occurred_at to occurredAt
-    metadata: "{'key':'value'}",
-  };
+async function addUser(userData: UserDataType) {
+  return await postToAPI("user", userData);
+}
 
+async function addAction(actionData: ActionDataType) {
+  return await postToAPI("action", actionData);
+}
+
+async function addEvent(eventObject: EventObjectType) {
+  return await postToAPI("event", eventObject);
+}
+
+async function handleEvent(userData: EventObjectType) {
   try {
     await addEvent(eventObject);
   } catch (error) {
     console.error("Error logging event:", error);
   }
 }
+async function handleAction(Data: ActionDataType) {
+  try {
+    await addAction(Data);
+  } catch (error) {
+    console.error("Error logging event:", error);
+  }
+}
+async function handleUser(Data: UserDataType) {
+  try {
+    await addUser(Data);
+  } catch (error) {
+    console.error("Error logging event:", error);
+  }
+}
 
-function LoginComponent() {
-  const userData = {
-    id: 2,
-    name: "test2",
-    email: "test2@gmail.com",
+function buttonPostComponent() {
+  const onEventButtonClick = async () => {
+    await handleEvent(eventObject);
   };
-
-  const onLoginButtonClick = async () => {
-    await handleAction(userData, 2);
+  const onActionButtonClick = async () => {
+    await handleAction(actionData);
+  };
+  const onUserButtonClick = async () => {
+    await handleUser(userData);
   };
 
   return (
-    <div>
-      <button onClick={onLoginButtonClick}>Simulate Login Success</button>
+    <div className="m-2">
+      <Button
+        className="rounded-xl m-4"
+        variant="outline"
+        onClick={onEventButtonClick}
+      >
+        Event
+      </Button>
+      <Button
+        className="rounded-xl m-4"
+        variant="outline"
+        onClick={onUserButtonClick}
+      >
+        User
+      </Button>
+      <Button
+        className="rounded-xl m-4"
+        variant="outline"
+        onClick={onActionButtonClick}
+      >
+        Action
+      </Button>
     </div>
   );
 }
 
-export default LoginComponent;
+export default buttonPostComponent;

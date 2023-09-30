@@ -7,10 +7,32 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     if (req.method === "POST") {
 
-      const event = await prisma.event.create({
-        data: req.body,
+      const { model, data } = req.body;
+
+  switch (model) {
+    case "user":
+      const newUser = await prisma.user.create({
+        data: data,
       });
-      res.json(event);
+      res.json(newUser);
+      break;
+    case "action":
+      
+      const newAction = await prisma.eventAction.create({
+        data: data,
+      });
+      res.json(newAction);
+      break;
+    case "event":
+      const newEvent = await prisma.event.create({
+        data: data,
+      });
+      res.json(newEvent);
+      break;
+    default:
+      res.status(400).json({ error: "Invalid model specified" });
+      break;
+    }
     } else if (req.method === "GET") {
       const {
         page = 1,
@@ -35,15 +57,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         where: filterOptions,
         skip,
         take: Number(limit),
+        orderBy: {
+          occurredAt: 'desc', 
+        },
         include: {
           actor: {
-            select: { name: true,email: true,id: true }  // Selecting only the name of the actor.
+            select: { name: true,email: true,id: true }  
           },
           action: {
-            select: { name: true,id: true }  // Selecting only the name of the action.
+            select: { name: true,id: true }  
           },
-          target: {                  // <-- This is what you would add
-            select: { name: true,id: true }  // Selecting only the name of the target.
+          target: {                  
+            select: { name: true,id: true } 
           }
         }
       });
@@ -54,7 +79,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       
       res.json(events);
     } else {
-      res.status(405).end(); // Method Not Allowed
+      res.status(405).end(); 
     }
   } catch (error) {
     res.status(500).json({ error: "Server error" , details: error});

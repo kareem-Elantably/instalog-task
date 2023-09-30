@@ -14,29 +14,29 @@ model User{
  id     Int       @id @default(autoincrement())
  name      String
  email     String      @unique
-  // Relation fields
+  
   actedEvents Event[] @relation("UserToEventActor")
   targetedEvents Event[] @relation("TargetUser")
 }
 
 model EventAction {
   id        Int         @id @default(autoincrement())
-  actionId  String      @unique // this is the evt_action_PGTD81NCAOQ2 kind of ID.
-  name      String      @unique // user.login_succeeded, etc.
-   // Relation field
+  actionId  String      @unique 
+  name      String      @unique 
+   
   events Event[]
 }
 model Event {
   id            Int         @id @default(autoincrement())
-  eventId       String      @unique // this is the evt_15B56WILKW5K kind of ID.
+  eventId       String      @unique 
   actor         User        @relation(name: "UserToEventActor", fields: [actorId], references: [id])
   actorId       Int
-  group         String      // instatus.com, etc.
+  group         String      
   action        EventAction @relation(fields: [actionId], references: [id])
   actionId      Int
   target        User?       @relation("TargetUser", fields: [targetId], references: [id])
   targetId      Int?
-  location      String      // IP address
+  location      String      
   occurredAt    DateTime    @default(now())
   metadata      Json
 }
