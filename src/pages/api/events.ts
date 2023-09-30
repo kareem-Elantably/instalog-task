@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler =  async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     if (req.method === "POST") {
 
@@ -85,3 +85,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(500).json({ error: "Server error" , details: error});
   }
 };
+
+export default handler;
