@@ -6,37 +6,39 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
-model User{
- id     Int       @id @default(autoincrement())
- name      String
- email     String      @unique
-  
-  actedEvents Event[] @relation("UserToEventActor")
+model User {
+  id    Int    @id @default(autoincrement())
+  name  String
+  email String @unique
+
+  actedEvents    Event[] @relation("UserToEventActor")
   targetedEvents Event[] @relation("TargetUser")
 }
 
 model EventAction {
-  id        Int         @id @default(autoincrement())
-  actionId  String      @unique 
-  name      String      @unique 
-   
+  id       Int    @id @default(autoincrement())
+  actionId String @unique
+  name     String @unique
+
   events Event[]
 }
+
 model Event {
-  id            Int         @id @default(autoincrement())
-  eventId       String      @unique 
-  actor         User        @relation(name: "UserToEventActor", fields: [actorId], references: [id])
-  actorId       Int
-  group         String      
-  action        EventAction @relation(fields: [actionId], references: [id])
-  actionId      Int
-  target        User?       @relation("TargetUser", fields: [targetId], references: [id])
-  targetId      Int?
-  location      String      
-  occurredAt    DateTime    @default(now())
-  metadata      Json
+  id         Int         @id @default(autoincrement())
+  eventId    String      @unique
+  actor      User        @relation(name: "UserToEventActor", fields: [actorId], references: [id])
+  actorId    Int
+  group      String
+  action     EventAction @relation(fields: [actionId], references: [id])
+  actionId   Int
+  target     User?       @relation("TargetUser", fields: [targetId], references: [id])
+  targetId   Int?
+  location   String
+  occurredAt DateTime    @default(now())
+  metadata   Json
 }
