@@ -40,7 +40,7 @@ function EventsTable() {
         event.action.name.toLowerCase().includes(searchTerm.toLowerCase())
     ) || [];
 
-  if (error) return <div>error</div>;
+  if (error) return <div>error {error}</div>;
   if (!events.length && !data) return <div>Loading...</div>;
 
   return (
