@@ -82,8 +82,9 @@ const handler =  async (req: NextApiRequest, res: NextApiResponse) => {
       res.status(405).end(); 
     }
   } catch (error) {
-    res.status(500).json({ error: "Server error" , details: error});
-  }
+    console.error(error);
+    res.status(500).json({ error: error.message });
+      }
 };
 
 export default handler;
