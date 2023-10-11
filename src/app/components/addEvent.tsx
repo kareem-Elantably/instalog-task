@@ -32,10 +32,10 @@ const actionData = {
 
 const eventObject = {
   eventId: uuidv4(),
-  actorId: 2,
+  actorId: 1,
   group: "instatus.com",
-  actionId: 2,
-  targetId: 2,
+  actionId: 1,
+  targetId: 1,
   location: "105.40.62.95",
   occurredAt: new Date().toISOString(),
   metadata: "{'key':'value'}",
