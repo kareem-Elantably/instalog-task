@@ -77,7 +77,6 @@ const handler =  async (req: NextApiRequest, res: NextApiResponse) => {
       res.json(events);
       
       
-      res.json(events);
     } else {
       res.status(405).end(); 
     }
